@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistik Reze</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(160deg, #6B4EFF, #8B6CFF);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #EDEAFF;
+}
+
+.container {
+  width: 90%;
+  max-width: 400px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  border-radius: 20px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.container.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  letter-spacing: 2px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
+}
+
+.title.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stat {
+  margin-bottom: 20px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.stat.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stat-name {
+  font-size: 14px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bar-container {
+  width: 100%;
+  height: 18px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  width: 0;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #00CFFF, #00FFA3);
+  transition: width 1.2s ease;
+}
+
+.bar-text {
+  font-size: 14px;
+  margin-left: 8px;
+  color: #EDEAFF;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container" id="container">
+  <div class="title" id="title">STATISTICS</div>
+
+  <div class="stat" id="strength">
+    <div class="stat-name">
+      <span>Strength</span>
+      <span class="bar-text">0%</span>
+    </div>
+    <div class="bar-container">
+      <div class="bar" data-percent="85"></div>
+    </div>
+  </div>
+
+  <div class="stat" id="speed">
+    <div class="stat-name">
+      <span>Speed</span>
+      <span class="bar-text">0%</span>
+    </div>
+    <div class="bar-container">
+      <div class="bar" data-percent="70"></div>
+    </div>
+  </div>
+
+  <div class="stat" id="intelligence">
+    <div class="stat-name">
+      <span>Intelligence</span>
+      <span class="bar-text">0%</span>
+    </div>
+    <div class="bar-container">
+      <div class="bar" data-percent="75"></div>
+    </div>
+  </div>
+
+  <div class="stat" id="endurance">
+    <div class="stat-name">
+      <span>Resilience</span>
+      <span class="bar-text">0%</span>
+    </div>
+    <div class="bar-container">
+      <div class="bar" data-percent="80"></div>
+    </div>
+  </div>
+</div>
+
+<!-- EXIT BUTTON -->
+<div class="exit-wrapper">
+  <a href="#" class="exit-link" id="homeBtn"></a>
+</div>
+
+<audio id="clickSound" src="https://raw.githubusercontent.com/AxionLabs-082/my-Labs/main/audio/klik3.mp3" preload="auto"></audio>
+
+<script>
+window.addEventListener('load', () => {
+  const container = document.getElementById('container');
+  const title = document.getElementById('title');
+  const stats = document.querySelectorAll('.stat');
+  const exit = document.querySelector('.exit-wrapper');
+
+  container.classList.add('visible');
+  title.classList.add('visible');
+
+  stats.forEach((stat, index) => {
+    setTimeout(() => {
+      stat.classList.add('visible');
+
+      const bar = stat.querySelector('.bar');
+      const barText = stat.querySelector('.bar-text');
+      const percent = bar.getAttribute('data-percent');
+      let progress = 0;
+
+      const interval = setInterval(() => {
+        if (progress >= percent) clearInterval(interval);
+        bar.style.width = `${progress}%`;
+        barText.textContent = `${progress}%`;
+        progress++;
+      }, 12);
+    }, 400 * (index + 1));
+  });
+
+  // ⬇ fade-in HOME setelah semua stat
+  setTimeout(() => {
+    exit.classList.add('visible');
+  }, 400 * (stats.length + 1));
+});
+</script>
+
+<script>
+const homeBtn = document.getElementById("homeBtn");
+const clickSound = document.getElementById("clickSound");
+
+homeBtn.addEventListener("click", function (e) {
+  e.preventDefault(); // tahan pindah halaman dulu
+
+  clickSound.currentTime = 0;
+  clickSound.play();
+
+  setTimeout(() => {
+    window.location.href = this.href;
+  }, 200); // delay biar sound kedengeran
+});
+</script>
+
+</body>
+</html>
